@@ -71,6 +71,11 @@ public class NoopBedrockPacketHelper extends BedrockPacketHelper {
     }
 
     @Override
+    protected void registerAbilities() {
+
+    }
+
+    @Override
     public EntityLinkData readEntityLink(ByteBuf buffer) {
         return null;
     }

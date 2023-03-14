@@ -15,11 +15,11 @@ public class ClientCheatAbilitySerializer_v567 implements BedrockPacketSerialize
 
     @Override
     public void serialize(ByteBuf buffer, BedrockPacketHelper helper, ClientCheatAbilityPacket packet) {
-        UpdateAbilitiesSerializer_v534.INSTANCE.writePlayerAbilities(buffer, helper, packet);
+       helper.writePlayerAbilities(buffer, helper, packet);
     }
 
     @Override
     public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, ClientCheatAbilityPacket packet) {
-        UpdateAbilitiesSerializer_v534.INSTANCE.readPlayerAbilities(buffer, helper, packet);
+        helper.readPlayerAbilities(buffer, helper, packet);
     }
 }

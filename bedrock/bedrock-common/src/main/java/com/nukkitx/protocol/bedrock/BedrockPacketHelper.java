@@ -34,6 +34,8 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.util.AsciiString;
 import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -42,6 +44,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.*;
 
@@ -60,6 +63,9 @@ public abstract class BedrockPacketHelper {
     protected final Int2ObjectBiMap<CommandParam> commandParams = new Int2ObjectBiMap<>();
     protected final Int2ObjectBiMap<ResourcePackType> resourcePackTypes = new Int2ObjectBiMap<>();
     protected final Int2ObjectBiMap<ContainerSlotType> containerSlotTypes = new Int2ObjectBiMap<>();
+    protected final Int2ObjectMap<Ability> abilities = new Int2ObjectOpenHashMap<>();
+
+    private static final Object2IntMap<Ability> FLAGS_TO_BITS = new Object2IntOpenHashMap<>();
 
     protected BedrockPacketHelper() {
         gameRuleTypes.defaultReturnValue(-1);
@@ -74,6 +80,11 @@ public abstract class BedrockPacketHelper {
         this.registerCommandParams();
         this.registerResourcePackTypes();
         this.registerContainerSlotTypes();
+        this.registerAbilities();
+
+        for (int i = 0; i < this.abilities.size(); i++) {
+            FLAGS_TO_BITS.put(this.abilities.get(i), (1 << i));
+        }
     }
 
     protected final void addGameRuleType(int index, Class<?> clazz) {
@@ -214,6 +225,10 @@ public abstract class BedrockPacketHelper {
     protected abstract void registerLevelEvents();
 
     protected abstract void registerContainerSlotTypes();
+
+    protected void registerAbilities() {
+
+    }
 
     public abstract EntityLinkData readEntityLink(ByteBuf buffer);
 
@@ -766,5 +781,53 @@ public abstract class BedrockPacketHelper {
 
     protected void writeIngredient(ByteBuf buffer, ItemDescriptorWithCount ingredient) {
         throw new UnsupportedOperationException();
+    }
+
+    public void writePlayerAbilities(ByteBuf buffer, BedrockPacketHelper helper, PlayerAbilityHolder abilityHolder) {
+        buffer.writeLongLE(abilityHolder.getUniqueEntityId());
+        VarInts.writeUnsignedInt(buffer, abilityHolder.getPlayerPermission().ordinal());
+        VarInts.writeUnsignedInt(buffer, abilityHolder.getCommandPermission().ordinal());
+        helper.writeArray(buffer, abilityHolder.getAbilityLayers(), this::writeAbilityLayer);
+    }
+
+    public void readPlayerAbilities(ByteBuf buffer, BedrockPacketHelper helper, PlayerAbilityHolder abilityHolder) {
+        abilityHolder.setUniqueEntityId(buffer.readLongLE());
+        abilityHolder.setPlayerPermission(PlayerPermission.values()[VarInts.readUnsignedInt(buffer)]);
+        abilityHolder.setCommandPermission(CommandPermission.values()[VarInts.readUnsignedInt(buffer)]);
+        helper.readArray(buffer, abilityHolder.getAbilityLayers(), this::readAbilityLayer);
+    }
+
+    private void writeAbilityLayer(ByteBuf buffer, AbilityLayer abilityLayer) {
+        buffer.writeShortLE(abilityLayer.getLayerType().ordinal());
+        buffer.writeIntLE(getAbilitiesNumber(abilityLayer.getAbilitiesSet()));
+        buffer.writeIntLE(getAbilitiesNumber(abilityLayer.getAbilityValues()));
+        buffer.writeFloatLE(abilityLayer.getFlySpeed());
+        buffer.writeFloatLE(abilityLayer.getWalkSpeed());
+    }
+
+    private AbilityLayer readAbilityLayer(ByteBuf buffer) {
+        AbilityLayer abilityLayer = new AbilityLayer();
+        abilityLayer.setLayerType(AbilityLayer.Type.values()[buffer.readShortLE()]);
+        readAbilitiesFromNumber(buffer.readIntLE(), abilityLayer.getAbilitiesSet());
+        readAbilitiesFromNumber(buffer.readIntLE(), abilityLayer.getAbilityValues());
+        abilityLayer.setFlySpeed(buffer.readFloatLE());
+        abilityLayer.setWalkSpeed(buffer.readFloatLE());
+        return abilityLayer;
+    }
+
+    private static int getAbilitiesNumber(Set<Ability> abilities) {
+        int number = 0;
+        for (Ability ability : abilities) {
+            number |= FLAGS_TO_BITS.getInt(ability);
+        }
+        return number;
+    }
+
+    private static void readAbilitiesFromNumber(int number, Set<Ability> abilities) {
+        FLAGS_TO_BITS.forEach((ability, index) -> {
+            if ((number & index) != 0) {
+                abilities.add(ability);
+            }
+        });
     }
 }

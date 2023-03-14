@@ -113,5 +113,12 @@ public enum EntityFlag {
     SONIC_BOOM,
     CAN_DASH,
     HAS_DASH_COOLDOWN,
-    PUSH_TOWARDS_CLOSEST_SPACE
+    PUSH_TOWARDS_CLOSEST_SPACE,
+    /**
+     * @since v575
+     */
+    SCENTING,
+    RISING,
+    FEELING_HAPPY,
+    SEARCHING
 }

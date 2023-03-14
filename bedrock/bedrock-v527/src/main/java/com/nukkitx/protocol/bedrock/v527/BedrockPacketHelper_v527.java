@@ -1,5 +1,6 @@
 package com.nukkitx.protocol.bedrock.v527;
 
+import com.nukkitx.protocol.bedrock.data.Ability;
 import com.nukkitx.protocol.bedrock.data.LevelEventType;
 import com.nukkitx.protocol.bedrock.data.SoundEvent;
 import com.nukkitx.protocol.bedrock.data.command.CommandParam;
@@ -77,5 +78,27 @@ public class BedrockPacketHelper_v527 extends BedrockPacketHelper_v503 {
         this.addSoundEvent(439, SoundEvent.RECORD_5);
         this.addSoundEvent(440, SoundEvent.CONVERT_TO_FROG);
         this.addSoundEvent(441, SoundEvent.UNDEFINED);
+    }
+
+    @Override
+    protected void registerAbilities() {
+        this.abilities.put(0, Ability.BUILD);
+        this.abilities.put(1, Ability.MINE);
+        this.abilities.put(2, Ability.DOORS_AND_SWITCHES);
+        this.abilities.put(3, Ability.OPEN_CONTAINERS);
+        this.abilities.put(4, Ability.ATTACK_PLAYERS);
+        this.abilities.put(5, Ability.ATTACK_MOBS);
+        this.abilities.put(6, Ability.OPERATOR_COMMANDS);
+        this.abilities.put(7, Ability.TELEPORT);
+        this.abilities.put(8, Ability.INVULNERABLE);
+        this.abilities.put(9, Ability.FLYING);
+        this.abilities.put(10, Ability.MAY_FLY);
+        this.abilities.put(11, Ability.INSTABUILD);
+        this.abilities.put(12, Ability.LIGHTNING);
+        this.abilities.put(13, Ability.FLY_SPEED);
+        this.abilities.put(14, Ability.WALK_SPEED);
+        this.abilities.put(15, Ability.MUTED);
+        this.abilities.put(16, Ability.WORLD_BUILDER);
+        this.abilities.put(17, Ability.NO_CLIP);
     }
 }

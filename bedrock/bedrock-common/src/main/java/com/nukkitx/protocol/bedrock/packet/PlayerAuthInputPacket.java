@@ -48,6 +48,10 @@ public class PlayerAuthInputPacket extends BedrockPacket {
      * @since v428
      */
     private final List<PlayerBlockActionData> playerActions = new ObjectArrayList<>();
+    /**
+     * @since v575
+     */
+    private Vector2f analogMoveVector;
 
     @Override
     public boolean handle(BedrockPacketHandler handler) {
