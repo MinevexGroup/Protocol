@@ -21,14 +21,12 @@ public class CameraInstructionSerializer_v575
     @Override
     public void serialize(ByteBuf buffer, BedrockPacketHelper helper,
                           CameraInstructionPacket packet) {
-        BedrockPacketSerializer.super.serialize(buffer, helper, packet);
         helper.writeTag(buffer, packet.getData());
     }
 
     @Override
     public void deserialize(ByteBuf buffer, BedrockPacketHelper helper,
                             CameraInstructionPacket packet) {
-        BedrockPacketSerializer.super.deserialize(buffer, helper, packet);
         packet.setData(helper.readTag(buffer));
     }
 }

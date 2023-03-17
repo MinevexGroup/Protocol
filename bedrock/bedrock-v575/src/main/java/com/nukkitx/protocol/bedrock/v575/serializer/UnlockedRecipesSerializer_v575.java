@@ -21,7 +21,6 @@ public class UnlockedRecipesSerializer_v575
     @Override
     public void serialize(ByteBuf buffer, BedrockPacketHelper helper,
                           UnlockedRecipesPacket packet) {
-        BedrockPacketSerializer.super.serialize(buffer, helper, packet);
         buffer.writeBoolean(packet.isUnlockedNotification());
         helper.writeArray(buffer, packet.getUnlockedRecipes(), helper::writeString);
     }
@@ -29,7 +28,6 @@ public class UnlockedRecipesSerializer_v575
     @Override
     public void deserialize(ByteBuf buffer, BedrockPacketHelper helper,
                             UnlockedRecipesPacket packet) {
-        BedrockPacketSerializer.super.deserialize(buffer, helper, packet);
         packet.setUnlockedNotification(buffer.readBoolean());
         helper.readArray(buffer, packet.getUnlockedRecipes(), helper::readString);
     }

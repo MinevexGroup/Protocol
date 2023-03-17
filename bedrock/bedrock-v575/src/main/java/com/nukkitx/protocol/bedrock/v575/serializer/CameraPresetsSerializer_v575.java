@@ -18,14 +18,12 @@ public class CameraPresetsSerializer_v575 implements BedrockPacketSerializer<Cam
 
     @Override
     public void serialize(ByteBuf buffer, BedrockPacketHelper helper, CameraPresetsPacket packet) {
-        BedrockPacketSerializer.super.serialize(buffer, helper, packet);
         helper.writeTag(buffer, packet.getData());
     }
 
     @Override
     public void deserialize(ByteBuf buffer, BedrockPacketHelper helper,
                             CameraPresetsPacket packet) {
-        BedrockPacketSerializer.super.deserialize(buffer, helper, packet);
         packet.setData(helper.readTag(buffer));
     }
 }
