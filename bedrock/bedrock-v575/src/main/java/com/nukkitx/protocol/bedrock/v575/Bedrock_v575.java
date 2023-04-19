@@ -254,7 +254,7 @@ public class Bedrock_v575 {
         .registerPacket(UpdateClientInputLocksPacket.class, UpdateClientInputLocksSerializer_v560.INSTANCE, 196)
         .registerPacket(ClientCheatAbilityPacket.class, ClientCheatAbilitySerializer_v567.INSTANCE, 197)
         .registerPacket(CameraPresetsPacket.class, CameraPresetsSerializer_v575.INSTANCE, 198)
-        .registerPacket(CameraInstructionPacket.class, CameraInstructionSerializer_v575.INSTANCE, 199)
-        .registerPacket(UnlockedRecipesPacket.class, UnlockedRecipesSerializer_v575.INSTANCE, 200)
+        .registerPacket(UnlockedRecipesPacket.class, UnlockedRecipesSerializer_v575.INSTANCE, 199)
+        .registerPacket(CameraInstructionPacket.class, CameraInstructionSerializer_v575.INSTANCE, 300)
         .build();
 }
