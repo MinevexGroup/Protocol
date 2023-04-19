@@ -42,6 +42,7 @@ import com.nukkitx.protocol.bedrock.packet.CommandBlockUpdatePacket;
 import com.nukkitx.protocol.bedrock.packet.CommandOutputPacket;
 import com.nukkitx.protocol.bedrock.packet.CommandRequestPacket;
 import com.nukkitx.protocol.bedrock.packet.CompletedUsingItemPacket;
+import com.nukkitx.protocol.bedrock.packet.CompressedBiomeDefinitionListPacket;
 import com.nukkitx.protocol.bedrock.packet.ContainerClosePacket;
 import com.nukkitx.protocol.bedrock.packet.ContainerOpenPacket;
 import com.nukkitx.protocol.bedrock.packet.ContainerSetDataPacket;
@@ -107,6 +108,7 @@ import com.nukkitx.protocol.bedrock.packet.NetworkStackLatencyPacket;
 import com.nukkitx.protocol.bedrock.packet.NpcDialoguePacket;
 import com.nukkitx.protocol.bedrock.packet.NpcRequestPacket;
 import com.nukkitx.protocol.bedrock.packet.OnScreenTextureAnimationPacket;
+import com.nukkitx.protocol.bedrock.packet.OpenSignPacket;
 import com.nukkitx.protocol.bedrock.packet.PacketViolationWarningPacket;
 import com.nukkitx.protocol.bedrock.packet.PhotoInfoRequestPacket;
 import com.nukkitx.protocol.bedrock.packet.PhotoTransferPacket;
@@ -185,6 +187,7 @@ import com.nukkitx.protocol.bedrock.packet.TickSyncPacket;
 import com.nukkitx.protocol.bedrock.packet.TickingAreasLoadStatusPacket;
 import com.nukkitx.protocol.bedrock.packet.ToastRequestPacket;
 import com.nukkitx.protocol.bedrock.packet.TransferPacket;
+import com.nukkitx.protocol.bedrock.packet.TrimDataPacket;
 import com.nukkitx.protocol.bedrock.packet.UnlockedRecipesPacket;
 import com.nukkitx.protocol.bedrock.packet.UpdateAbilitiesPacket;
 import com.nukkitx.protocol.bedrock.packet.UpdateAdventureSettingsPacket;
@@ -991,6 +994,18 @@ public interface BedrockPacketHandler extends PacketHandler {
     }
 
     default boolean handle(UnlockedRecipesPacket packet) {
+        return false;
+    }
+
+    default boolean handle(CompressedBiomeDefinitionListPacket packet) {
+        return false;
+    }
+
+    default boolean handle(TrimDataPacket packet) {
+        return false;
+    }
+
+    default boolean handle(OpenSignPacket packet) {
         return false;
     }
 }

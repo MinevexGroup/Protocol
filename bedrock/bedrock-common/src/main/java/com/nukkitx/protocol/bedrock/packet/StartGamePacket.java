@@ -159,6 +159,12 @@ public class StartGamePacket extends BedrockPacket {
      * @since v567
      */
     private boolean emoteChatMuted;
+    /**
+     * @since v582
+     */
+    private boolean blockNetworkIdsHashed;
+    private boolean createdInEditor;
+    private boolean exportedFromEditor;
 
     @Override
     public final boolean handle(BedrockPacketHandler handler) {

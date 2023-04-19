@@ -61,5 +61,6 @@ public enum ContainerSlotType {
     BARREL,
     CURSOR,
     CREATIVE_OUTPUT,
-    RECIPE_BOOK
+    RECIPE_BOOK,
+    SMITING_TABLE_TEMPLATE
 }
