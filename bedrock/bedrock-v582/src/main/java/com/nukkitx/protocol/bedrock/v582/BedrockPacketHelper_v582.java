@@ -1,6 +1,7 @@
 package com.nukkitx.protocol.bedrock.v582;
 
 import com.nukkitx.protocol.bedrock.data.LevelEventType;
+import com.nukkitx.protocol.bedrock.data.command.CommandParam;
 import com.nukkitx.protocol.bedrock.data.inventory.ContainerSlotType;
 import com.nukkitx.protocol.bedrock.v575.BedrockPacketHelper_v575;
 import lombok.AccessLevel;
@@ -20,6 +21,28 @@ public class BedrockPacketHelper_v582 extends BedrockPacketHelper_v575 {
         super.registerContainerSlotTypes();
 
         this.containerSlotTypes.put(61, ContainerSlotType.SMITING_TABLE_TEMPLATE);
+    }
+
+    @Override
+    protected void registerCommandParams() {
+        addCommandParam(1, CommandParam.INT);
+        addCommandParam(3, CommandParam.FLOAT);
+        addCommandParam(4, CommandParam.VALUE);
+        addCommandParam(5, CommandParam.WILDCARD_INT);
+        addCommandParam(6, CommandParam.OPERATOR);
+        addCommandParam(7, CommandParam.COMPARE_OPERATOR);
+        addCommandParam(8, CommandParam.TARGET);
+        addCommandParam(10, CommandParam.WILDCARD_TARGET);
+        addCommandParam(17, CommandParam.FILE_PATH);
+        addCommandParam(23, CommandParam.INT_RANGE);
+        addCommandParam(44, CommandParam.STRING);
+        addCommandParam(52, CommandParam.BLOCK_POSITION);
+        addCommandParam(53, CommandParam.POSITION);
+        addCommandParam(55, CommandParam.MESSAGE);
+        addCommandParam(58, CommandParam.TEXT);
+        addCommandParam(62, CommandParam.JSON);
+        addCommandParam(71, CommandParam.BLOCK_STATES);
+        addCommandParam(74, CommandParam.COMMAND);
     }
 
     @Override
