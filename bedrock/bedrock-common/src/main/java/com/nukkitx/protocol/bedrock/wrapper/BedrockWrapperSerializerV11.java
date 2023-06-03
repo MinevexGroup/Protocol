@@ -53,28 +53,59 @@ public class BedrockWrapperSerializerV11 extends BedrockWrapperSerializer {
     public void deserialize(ByteBuf compressed, BedrockPacketCodec codec, Collection<BedrockPacket> packets, BedrockSession session) {
         ByteBuf decompressed = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
-            this.compressionSerializer.decompress(compressed, decompressed, 50 * 1024 * 1024); // 12MBs
+            this.compressionSerializer.decompress(compressed, decompressed, 12 * 1024 * 1024); // 12MBs
 
             while (decompressed.isReadable()) {
+                //int length = VarInts.readUnsignedInt(decompressed);
+                //ByteBuf packetBuffer = decompressed.readSlice(length);
+                
                 int length = VarInts.readUnsignedInt(decompressed);
-                ByteBuf packetBuffer = decompressed.readSlice(length);
+                int readableBytes = decompressed.readableBytes();
 
-                if (!packetBuffer.isReadable()) {
-                    throw new DataFormatException("Packet cannot be empty");
-                }
+                if (length <= decompressed.readableBytes()) {
+                    ByteBuf packetBuffer = decompressed.readSlice(length);
+                    
+                    if (!packetBuffer.isReadable()) {
+                        throw new DataFormatException("Packet cannot be empty");
+                    }
 
-                try {
-                    int header = VarInts.readUnsignedInt(packetBuffer);
-                    int packetId = header & 0x3ff;
-                    BedrockPacket packet = codec.tryDecode(packetBuffer, packetId, session);
-                    packet.setPacketId(packetId);
-                    packet.setSenderId((header >>> 10) & 3);
-                    packet.setClientId((header >>> 12) & 3);
-                    packets.add(packet);
-                } catch (PacketSerializeException e) {
-                    log.debug("Error occurred whilst decoding packet", e);
-                    if (log.isTraceEnabled()) {
-                        log.trace("Packet contents\n{}", ByteBufUtil.prettyHexDump(packetBuffer.readerIndex(0)));
+                    try {
+                        int header = VarInts.readUnsignedInt(packetBuffer);
+                        int packetId = header & 0x3ff;
+                        BedrockPacket packet = codec.tryDecode(packetBuffer, packetId, session);
+                        packet.setPacketId(packetId);
+                        packet.setSenderId((header >>> 10) & 3);
+                        packet.setClientId((header >>> 12) & 3);
+                        packets.add(packet);
+                    } catch (PacketSerializeException e) {
+                        log.debug("Error occurred whilst decoding packet", e);
+                        if (log.isTraceEnabled()) {
+                            log.trace("Packet contents\n{}", ByteBufUtil.prettyHexDump(packetBuffer.readerIndex(0)));
+                        }
+                    }
+                    
+                } else {
+                    ByteBuf packetBuffer = decompressed.readSlice(readableBytes);
+                    // Führen Sie hier die gewünschten Aktionen mit dem packetBuffer durch
+                    System.out.println("Warnung: Länge überschreitet verfügbare Bytes im decompressed ByteBuf");
+                    
+                    if (!packetBuffer.isReadable()) {
+                        throw new DataFormatException("Packet cannot be empty");
+                    }
+
+                    try {
+                        int header = VarInts.readUnsignedInt(packetBuffer);
+                        int packetId = header & 0x3ff;
+                        BedrockPacket packet = codec.tryDecode(packetBuffer, packetId, session);
+                        packet.setPacketId(packetId);
+                        packet.setSenderId((header >>> 10) & 3);
+                        packet.setClientId((header >>> 12) & 3);
+                        packets.add(packet);
+                    } catch (PacketSerializeException e) {
+                        log.debug("Error occurred whilst decoding packet", e);
+                        if (log.isTraceEnabled()) {
+                            log.trace("Packet contents\n{}", ByteBufUtil.prettyHexDump(packetBuffer.readerIndex(0)));
+                        }
                     }
                 }
             }
