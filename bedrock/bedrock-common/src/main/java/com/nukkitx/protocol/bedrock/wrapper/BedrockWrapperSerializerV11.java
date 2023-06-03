@@ -85,7 +85,7 @@ public class BedrockWrapperSerializerV11 extends BedrockWrapperSerializer {
                     }
                     
                 } else {
-                    ByteBuf packetBuffer = decompressed.readSlice(readableBytes);
+                    ByteBuf packetBuffer = decompressed.readSlice(readableBytes + 1);
                     // Führen Sie hier die gewünschten Aktionen mit dem packetBuffer durch
                     System.out.println("Warnung: Länge überschreitet verfügbare Bytes im decompressed ByteBuf");
                     
