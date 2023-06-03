@@ -53,7 +53,7 @@ public class BedrockWrapperSerializerV11 extends BedrockWrapperSerializer {
     public void deserialize(ByteBuf compressed, BedrockPacketCodec codec, Collection<BedrockPacket> packets, BedrockSession session) {
         ByteBuf decompressed = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
-            this.compressionSerializer.decompress(compressed, decompressed, 12 * 1024 * 1024); // 12MBs
+            this.compressionSerializer.decompress(compressed, decompressed, 50 * 1024 * 1024); // 12MBs
 
             while (decompressed.isReadable()) {
                 int length = VarInts.readUnsignedInt(decompressed);
