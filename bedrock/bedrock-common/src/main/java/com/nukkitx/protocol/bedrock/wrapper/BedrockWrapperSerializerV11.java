@@ -36,7 +36,7 @@ public class BedrockWrapperSerializerV11 extends BedrockWrapperSerializer {
                     VarInts.writeUnsignedInt(uncompressed, packetBuffer.readableBytes());
                     uncompressed.writeBytes(packetBuffer);
                 } catch (PacketSerializeException e) {
-                    log.debug("Error occurred whilst encoding " + packet.getClass().getSimpleName(), e);
+                    log.debug("An Error occurred whilst encoding " + packet.getClass().getSimpleName(), e);
                 } finally {
                     packetBuffer.release();
                 }
