@@ -59,7 +59,7 @@ public class BedrockWrapperSerializerV11 extends BedrockWrapperSerializer {
                 int length = VarInts.readUnsignedInt(decompressed);
 
                 if (decompressed.readableBytes() < length) {
-                    throw new DataFormatException("Invalid length");
+                    length = decompressed.readableBytes();
                 }
 
                 ByteBuf packetBuffer = decompressed.readSlice(length);
