@@ -36,7 +36,7 @@ public class BedrockWrapperSerializerV11 extends BedrockWrapperSerializer {
                     VarInts.writeUnsignedInt(uncompressed, packetBuffer.readableBytes());
                     uncompressed.writeBytes(packetBuffer);
                 } catch (PacketSerializeException e) {
-                    log.debug("An Error occurred whilst encoding " + packet.getClass().getSimpleName(), e);
+                    log.debug("Error occurred whilst encoding " + packet.getClass().getSimpleName(), e);
                 } finally {
                     packetBuffer.release();
                 }
@@ -56,8 +56,12 @@ public class BedrockWrapperSerializerV11 extends BedrockWrapperSerializer {
             this.compressionSerializer.decompress(compressed, decompressed, 12 * 1024 * 1024); // 12MBs
 
             while (decompressed.isReadable()) {
-                int length = decompressed.readableBytes();
-                System.out.println(length);
+                int length = VarInts.readUnsignedInt(decompressed);
+
+                if (decompressed.readableBytes() < length) {
+                    throw new DataFormatException("Invalid length");
+                }
+
                 ByteBuf packetBuffer = decompressed.readSlice(length);
 
                 if (!packetBuffer.isReadable()) {
