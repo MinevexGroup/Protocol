@@ -59,6 +59,9 @@ public class BedrockWrapperSerializerV11 extends BedrockWrapperSerializer {
                 int length = VarInts.readUnsignedInt(decompressed);
 
                 if (decompressed.readableBytes() < length) {
+                    System.out.println(decompressed.readableBytes());
+                    System.out.println(length);
+                    System.out.println(decompressed);
                     length = decompressed.readableBytes();
                 }
 
