@@ -53,19 +53,10 @@ public class BedrockWrapperSerializerV11 extends BedrockWrapperSerializer {
     public void deserialize(ByteBuf compressed, BedrockPacketCodec codec, Collection<BedrockPacket> packets, BedrockSession session) {
         ByteBuf decompressed = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
-            this.compressionSerializer.decompress(compressed, decompressed, 12 * 1024 * 1024); // 12MBs lol
+            this.compressionSerializer.decompress(compressed, decompressed, 12 * 1024 * 1024); // 12MBs
 
             while (decompressed.isReadable()) {
-                if (decompressed.readableBytes() < VarInts.MAX_VAR_INT_SIZE) {
-                    throw new DataFormatException("Invalid length!");
-                }
-
-                int length = VarInts.readUnsignedInt(decompressed);
-
-                if (decompressed.readableBytes() < length) {
-                    throw new DataFormatException("Invalid length");
-                }
-
+                int length = decompressed.readableBytes();
                 ByteBuf packetBuffer = decompressed.readSlice(length);
 
                 if (!packetBuffer.isReadable()) {
