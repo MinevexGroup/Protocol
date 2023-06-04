@@ -57,6 +57,7 @@ public class BedrockWrapperSerializerV11 extends BedrockWrapperSerializer {
 
             while (decompressed.isReadable()) {
                 int length = decompressed.readableBytes();
+                System.out.println(length);
                 ByteBuf packetBuffer = decompressed.readSlice(length);
 
                 if (!packetBuffer.isReadable()) {
