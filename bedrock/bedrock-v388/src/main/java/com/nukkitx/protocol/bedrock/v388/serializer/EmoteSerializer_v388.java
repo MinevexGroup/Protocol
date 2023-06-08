@@ -18,6 +18,17 @@ public class EmoteSerializer_v388 implements BedrockPacketSerializer<EmotePacket
     public void serialize(ByteBuf buffer, BedrockPacketHelper helper, EmotePacket packet) {
         VarInts.writeUnsignedLong(buffer, packet.getRuntimeEntityId());
         helper.writeString(buffer, packet.getEmoteId());
+        this.writeFlags(buffer, packet);
+    }
+
+    @Override
+    public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, EmotePacket packet) {
+        packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
+        packet.setEmoteId(helper.readString(buffer));
+        this.readFlags(buffer, packet);
+    }
+
+    public void writeFlags(ByteBuf buffer, EmotePacket packet) {
         int flags = 0;
         for (EmoteFlag flag : packet.getFlags()) {
             flags |= 1 << flag.ordinal();
@@ -25,10 +36,7 @@ public class EmoteSerializer_v388 implements BedrockPacketSerializer<EmotePacket
         buffer.writeByte(flags);
     }
 
-    @Override
-    public void deserialize(ByteBuf buffer, BedrockPacketHelper helper, EmotePacket packet) {
-        packet.setRuntimeEntityId(VarInts.readUnsignedLong(buffer));
-        packet.setEmoteId(helper.readString(buffer));
+    public void readFlags(ByteBuf buffer, EmotePacket packet) {
         int flags = buffer.readUnsignedByte();
         for (EmoteFlag flag : EmoteFlag.values()) {
             if ((flags & (1L << flag.ordinal())) != 0) {

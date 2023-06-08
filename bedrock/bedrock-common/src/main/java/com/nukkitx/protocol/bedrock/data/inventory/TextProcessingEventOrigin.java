@@ -20,5 +20,17 @@ public enum TextProcessingEventOrigin {
     /**
      * @since v560
      */
-    TICKING_AREA_TEXT
+    TICKING_AREA_TEXT,
+    /**
+     * @since v589
+     */
+    KICK_COMMAND,
+    /**
+     * @since v589
+     */
+    TITLE_COMMAND,
+    /**
+     * @since v589
+     */
+    SUMMON_COMMAND
 }

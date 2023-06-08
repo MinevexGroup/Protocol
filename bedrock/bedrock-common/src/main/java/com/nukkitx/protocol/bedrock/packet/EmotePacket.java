@@ -15,6 +15,14 @@ import java.util.Set;
 public class EmotePacket extends BedrockPacket {
     private long runtimeEntityId;
     private String emoteId;
+    /**
+     * @since v589
+     */
+    private String xuid;
+    /**
+     * @since v589
+     */
+    private String platformId;
     private final Set<EmoteFlag> flags = EnumSet.noneOf(EmoteFlag.class);
 
     @Override

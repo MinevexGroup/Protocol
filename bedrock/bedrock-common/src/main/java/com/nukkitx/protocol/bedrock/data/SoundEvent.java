@@ -467,5 +467,21 @@ public enum SoundEvent {
     BRUSH_COMPLETED,
     SHATTER_DECORATED_POT,
     BREAK_DECORATED_POT,
+    /**
+     * @since v589
+     */
+    SNIFFER_EGG_CRACK,
+    /**
+     * @since v589
+     */
+    SNIFFER_EGG_HATCHED,
+    /**
+     * @since v589
+     */
+    WAXED_SIGN_INTERACT_FAIL,
+    /**
+     * @since v589
+     */
+    RECORD_RELIC,
     UNDEFINED
 }
