@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class EmoteSerializer_v388 implements BedrockPacketSerializer<EmotePacket> {
 
     public static final EmoteSerializer_v388 INSTANCE = new EmoteSerializer_v388();
