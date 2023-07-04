@@ -181,7 +181,11 @@ public enum EntityData {
     /**
      * @since v526
      */
-    PLAYER_HAS_DIED(Type.BYTE);
+    PLAYER_HAS_DIED(Type.BYTE),
+    /**
+     * @since v594
+     */
+    COLLISION_BOX(Type.NBT);
 
     private final Type type;
     private final boolean flags;

@@ -46,5 +46,17 @@ public enum PlayerActionType {
     /**
      * @since v567
      */
-    HANDLED_TELEPORT
+    HANDLED_TELEPORT,
+    /**
+     * @since v594
+     */
+    MISSED_SWING,
+    /**
+     * @since v594
+     */
+    START_CRAWLING,
+    /**
+     * @since v594
+     */
+    STOP_CRAWLING
 }

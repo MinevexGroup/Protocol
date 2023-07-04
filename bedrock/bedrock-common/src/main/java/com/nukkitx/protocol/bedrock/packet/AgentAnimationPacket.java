@@ -7,22 +7,23 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * Deprecated since v594
+ * @author Kaooot
+ * @version 1.0
  */
-@Deprecated
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class ScriptCustomEventPacket extends BedrockPacket {
-    private String eventName;
-    private String data;
+public class AgentAnimationPacket extends BedrockPacket {
+
+    private byte animation;
+    private long runtimeEntityId;
 
     @Override
-    public final boolean handle(BedrockPacketHandler handler) {
+    public boolean handle(BedrockPacketHandler handler) {
         return handler.handle(this);
     }
 
+    @Override
     public BedrockPacketType getPacketType() {
-        return BedrockPacketType.SCRIPT_CUSTOM_EVENT;
+        return BedrockPacketType.AGENT_ANIMATION;
     }
 }
-

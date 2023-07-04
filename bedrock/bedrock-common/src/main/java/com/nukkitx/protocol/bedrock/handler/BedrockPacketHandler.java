@@ -10,6 +10,7 @@ import com.nukkitx.protocol.bedrock.packet.AddPlayerPacket;
 import com.nukkitx.protocol.bedrock.packet.AddVolumeEntityPacket;
 import com.nukkitx.protocol.bedrock.packet.AdventureSettingsPacket;
 import com.nukkitx.protocol.bedrock.packet.AgentActionEventPacket;
+import com.nukkitx.protocol.bedrock.packet.AgentAnimationPacket;
 import com.nukkitx.protocol.bedrock.packet.AnimateEntityPacket;
 import com.nukkitx.protocol.bedrock.packet.AnimatePacket;
 import com.nukkitx.protocol.bedrock.packet.AnvilDamagePacket;
@@ -1006,6 +1007,10 @@ public interface BedrockPacketHandler extends PacketHandler {
     }
 
     default boolean handle(OpenSignPacket packet) {
+        return false;
+    }
+
+    default boolean handle(AgentAnimationPacket packet) {
         return false;
     }
 }

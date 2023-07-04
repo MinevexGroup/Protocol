@@ -120,5 +120,9 @@ public enum EntityFlag {
     SCENTING,
     RISING,
     FEELING_HAPPY,
-    SEARCHING
+    SEARCHING,
+    /**
+     * @since v594
+     */
+    CRAWLING
 }

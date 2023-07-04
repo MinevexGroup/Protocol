@@ -2,24 +2,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>bedrock-parent</artifactId>
-        <groupId>com.nukkitx.protocol</groupId>
-        <version>2.9.21-GHD-SNAPSHOT</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.nukkitx.protocol</groupId>
+        <artifactId>parent</artifactId>
+        <version>2.9.21-GHD-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
-    <artifactId>bedrock-v545</artifactId>
+    <artifactId>bedrock-v594</artifactId>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.nukkitx.protocol</groupId>
-            <artifactId>bedrock-v544</artifactId>
+            <artifactId>bedrock-v589</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
