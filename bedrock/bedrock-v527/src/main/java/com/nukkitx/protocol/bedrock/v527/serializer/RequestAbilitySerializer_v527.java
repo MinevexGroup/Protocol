@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequestAbilitySerializer_v527 implements BedrockPacketSerializer<RequestAbilityPacket> {
     public static final RequestAbilitySerializer_v527 INSTANCE = new RequestAbilitySerializer_v527();
 
