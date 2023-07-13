@@ -399,6 +399,7 @@ import com.nukkitx.protocol.bedrock.v589.serializer.EmoteSerializer_v589;
 import com.nukkitx.protocol.bedrock.v589.serializer.EventSerializer_v589;
 import com.nukkitx.protocol.bedrock.v589.serializer.StartGameSerializer_v589;
 import com.nukkitx.protocol.bedrock.v594.serializer.AgentAnimationSerializer_v594;
+import com.nukkitx.protocol.bedrock.v594.serializer.AvailableCommandsSerializer_v594;
 import com.nukkitx.protocol.bedrock.v594.serializer.RequestAbilitySerializer_v594;
 import lombok.experimental.UtilityClass;
 
@@ -488,7 +489,7 @@ public class Bedrock_v594 {
         .registerPacket(CameraPacket.class, CameraSerializer_v291.INSTANCE, 73)
         .registerPacket(BossEventPacket.class, BossEventSerializer_v486.INSTANCE, 74)
         .registerPacket(ShowCreditsPacket.class, ShowCreditsSerializer_v291.INSTANCE, 75)
-        .registerPacket(AvailableCommandsPacket.class, AvailableCommandsSerializer_v448.INSTANCE, 76)
+        .registerPacket(AvailableCommandsPacket.class, AvailableCommandsSerializer_v594.INSTANCE, 76)
         .registerPacket(CommandRequestPacket.class, CommandRequestSerializer_v567.INSTANCE, 77)
         .registerPacket(CommandBlockUpdatePacket.class, CommandBlockUpdateSerializer_v361.INSTANCE, 78)
         .registerPacket(CommandOutputPacket.class, CommandOutputSerializer_v291.INSTANCE, 79)

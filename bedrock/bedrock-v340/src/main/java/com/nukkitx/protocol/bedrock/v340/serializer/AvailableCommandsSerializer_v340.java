@@ -31,12 +31,12 @@ public class AvailableCommandsSerializer_v340 extends AvailableCommandsSerialize
     }
 
     @Override
-    protected CommandParamData.Builder readParameter(ByteBuf buffer, BedrockPacketHelper helper) {
+    protected CommandParamData readParameter(ByteBuf buffer, BedrockPacketHelper helper, List<CommandEnumData> enums, List<CommandEnumData> softEnums, List<String> postFixes) {
         String parameterName = helper.readString(buffer);
         CommandSymbolData type = CommandSymbolData.deserialize(buffer.readIntLE());
         boolean optional = buffer.readBoolean();
         byte options = buffer.readByte();
 
-        return new CommandParamData.Builder(parameterName, type, optional, options);
+        return this.paramBuilderToParamData(helper, new CommandParamData.Builder(parameterName, type, optional, options),enums,softEnums,postFixes);
     }
 }
