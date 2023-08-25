@@ -35,8 +35,8 @@ public class AvailableCommandsSerializer_v388 extends AvailableCommandsSerialize
                 enumsSet.add(data.getAliases());
             }
 
-            for (CommandParamData[] overload : data.getOverloads()) {
-                for (CommandParamData parameter : overload) {
+            for (CommandOverloadData overload : data.getOverloads()) {
+                for (CommandParamData parameter : overload.getOverloads()) {
                     CommandEnumData commandEnumData = parameter.getEnumData();
                     if (commandEnumData != null) {
                         if (commandEnumData.isSoft()) {
@@ -56,7 +56,7 @@ public class AvailableCommandsSerializer_v388 extends AvailableCommandsSerialize
         }
 
         // Add Constraint Enums
-        for(CommandEnumData enumData : packet.getConstraints().stream().map(CommandEnumConstraintData::getEnumData).collect(Collectors.toList())) {
+        for (CommandEnumData enumData : packet.getConstraints().stream().map(CommandEnumConstraintData::getEnumData).collect(Collectors.toList())) {
             if (enumData.isSoft()) {
                 softEnumsSet.add(enumData);
             } else {
@@ -100,7 +100,7 @@ public class AvailableCommandsSerializer_v388 extends AvailableCommandsSerialize
 
         this.readEnums(buffer, helper, enumValues, enums);
 
-        helper.readArray(buffer, commands, this::readCommand);
+        helper.readArray(buffer, commands, buf -> this.readCommand(buffer, helper, enums, softEnums, postFixes));
 
         helper.readArray(buffer, softEnums, buf -> helper.readCommandEnum(buffer, true));
 
@@ -117,45 +117,8 @@ public class AvailableCommandsSerializer_v388 extends AvailableCommandsSerialize
             int aliasesIndex = command.getAliases();
             CommandEnumData aliases = aliasesIndex == -1 ? null : enums.get(aliasesIndex);
 
-            CommandParamData.Builder[][] overloadBuilders = command.getOverloads();
-            CommandParamData[][] overloads = new CommandParamData[overloadBuilders.length][];
-            for (int i = 0; i < overloadBuilders.length; i++) {
-                overloads[i] = new CommandParamData[overloadBuilders[i].length];
-                for (int i2 = 0; i2 < overloadBuilders[i].length; i2++) {
-                    CommandParamData.Builder param = overloadBuilders[i][i2];
-                    String name = param.getName();
-                    CommandSymbolData type = param.getType();
-                    boolean optional = param.isOptional();
-                    byte optionsByte = param.getOptions();
-
-                    String postfix = null;
-                    CommandEnumData enumData = null;
-                    CommandParam commandParam = null;
-                    if (type.isPostfix()) {
-                        postfix = postFixes.get(type.getValue());
-                    } else {
-                        if (type.isCommandEnum()) {
-                            enumData = enums.get(type.getValue());
-                        } else if (type.isSoftEnum()) {
-                            enumData = softEnums.get(type.getValue());
-                        } else {
-                            commandParam = helper.getCommandParam(type.getValue());
-                        }
-                    }
-
-                    List<CommandParamOption> options = new ObjectArrayList<>();
-                    for (int idx = 0; idx < 8; idx++) {
-                        if ((optionsByte & (1 << idx)) != 0) {
-                            options.add(OPTIONS[idx]);
-                        }
-                    }
-
-                    overloads[i][i2] = new CommandParamData(name, optional, enumData, commandParam, postfix, options);
-                }
-            }
-
             packet.getCommands().add(new CommandData(command.getName(), command.getDescription(),
-                    flagList, command.getPermission(), aliases, overloads));
+                    flagList, command.getPermission(), aliases, Collections.emptyList(), command.getOverloads()));
         }
 
         // Constraints

@@ -15,6 +15,7 @@ import com.nukkitx.protocol.bedrock.data.ExperimentData;
 import com.nukkitx.protocol.bedrock.data.GamePublishSetting;
 import com.nukkitx.protocol.bedrock.data.GameRuleData;
 import com.nukkitx.protocol.bedrock.data.GameType;
+import com.nukkitx.protocol.bedrock.data.NetworkPermissions;
 import com.nukkitx.protocol.bedrock.data.PlayerPermission;
 import com.nukkitx.protocol.bedrock.data.SpawnBiomeType;
 import com.nukkitx.protocol.bedrock.data.SyncedPlayerMovementSettings;
@@ -165,6 +166,10 @@ public class StartGamePacket extends BedrockPacket {
     private boolean blockNetworkIdsHashed;
     private boolean createdInEditor;
     private boolean exportedFromEditor;
+    /**
+     * @since v589
+     */
+    private NetworkPermissions networkPermissions = NetworkPermissions.DEFAULT;
 
     @Override
     public final boolean handle(BedrockPacketHandler handler) {

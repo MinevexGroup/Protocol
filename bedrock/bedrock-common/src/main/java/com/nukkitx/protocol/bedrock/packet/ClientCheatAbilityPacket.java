@@ -14,6 +14,10 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * Deprecated since v594
+ */
+@Deprecated
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
 @ToString(doNotUseGetters = true)

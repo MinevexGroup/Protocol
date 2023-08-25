@@ -46,8 +46,8 @@ public class AvailableCommandsSerializer_v291 implements BedrockPacketSerializer
                 enumsSet.add(data.getAliases());
             }
 
-            for (CommandParamData[] overload : data.getOverloads()) {
-                for (CommandParamData parameter : overload) {
+            for (CommandOverloadData overload : data.getOverloads()) {
+                for (CommandParamData parameter : overload.getOverloads()) {
                     CommandEnumData commandEnumData = parameter.getEnumData();
                     if (commandEnumData != null) {
                         if (commandEnumData.isSoft()) {
@@ -96,7 +96,7 @@ public class AvailableCommandsSerializer_v291 implements BedrockPacketSerializer
 
         this.readEnums(buffer, helper, enumValues, enums);
 
-        helper.readArray(buffer, commands, this::readCommand);
+        helper.readArray(buffer, commands, buf -> this.readCommand(buffer, helper, enums, softEnums, postFixes));
 
         helper.readArray(buffer, softEnums, buf -> helper.readCommandEnum(buffer, true));
 
@@ -113,43 +113,8 @@ public class AvailableCommandsSerializer_v291 implements BedrockPacketSerializer
             int aliasesIndex = command.getAliases();
             CommandEnumData aliases = aliasesIndex == -1 ? null : enums.get(aliasesIndex);
 
-            CommandParamData.Builder[][] overloadBuilders = command.getOverloads();
-            CommandParamData[][] overloads = new CommandParamData[overloadBuilders.length][];
-            for (int i = 0; i < overloadBuilders.length; i++) {
-                overloads[i] = new CommandParamData[overloadBuilders[i].length];
-                for (int i2 = 0; i2 < overloadBuilders[i].length; i2++) {
-                    CommandParamData.Builder param = overloadBuilders[i][i2];
-                    String name = param.getName();
-                    CommandSymbolData type = param.getType();
-                    boolean optional = param.isOptional();
-                    byte optionsByte = param.getOptions();
-
-                    String postfix = null;
-                    CommandEnumData enumData = null;
-                    CommandParam commandParam = null;
-                    if (type.isPostfix()) {
-                        postfix = postFixes.get(type.getValue());
-                    } else if (type.isCommandEnum()) {
-                        enumData = enums.get(type.getValue());
-                    } else if (type.isSoftEnum()) {
-                        enumData = softEnums.get(type.getValue());
-                    } else {
-                        commandParam = helper.getCommandParam(type.getValue());
-                    }
-
-                    List<CommandParamOption> options = new ObjectArrayList<>();
-                    for (int idx = 0; idx < 8; idx++) {
-                        if ((optionsByte & (1 << idx)) != 0) {
-                            options.add(OPTIONS[idx]);
-                        }
-                    }
-
-                    overloads[i][i2] = new CommandParamData(name, optional, enumData, commandParam, postfix, options);
-                }
-            }
-
             packet.getCommands().add(new CommandData(command.getName(), command.getDescription(),
-                    flagList, command.getPermission(), aliases, overloads));
+                    flagList, command.getPermission(), aliases, Collections.emptyList(), command.getOverloads()));
         }
     }
 
@@ -217,31 +182,34 @@ public class AvailableCommandsSerializer_v291 implements BedrockPacketSerializer
         CommandEnumData aliases = commandData.getAliases();
         buffer.writeIntLE(enums.indexOf(aliases));
 
-        CommandParamData[][] overloads = commandData.getOverloads();
+        CommandOverloadData[] overloads = commandData.getOverloads();
         VarInts.writeUnsignedInt(buffer, overloads.length);
-        for (CommandParamData[] overload : overloads) {
-            VarInts.writeUnsignedInt(buffer, overload.length);
-            for (CommandParamData param : overload) {
+        for (CommandOverloadData overload : overloads) {
+            buffer.writeBoolean(overload.isChaining());
+            VarInts.writeUnsignedInt(buffer, overload.getOverloads().length);
+            for (CommandParamData param : overload.getOverloads()) {
                 this.writeParameter(buffer, helper, param, enums, softEnums, postFixes);
             }
         }
     }
 
-    protected CommandData.Builder readCommand(ByteBuf buffer, BedrockPacketHelper helper) {
+    protected CommandData.Builder readCommand(ByteBuf buffer, BedrockPacketHelper helper, List<CommandEnumData> enums, List<CommandEnumData> softEnums, List<String> postFixes) {
         String name = helper.readString(buffer);
         String description = helper.readString(buffer);
         byte flags = buffer.readByte();
         byte permissions = buffer.readByte();
         int aliasesIndex = buffer.readIntLE();
 
-        CommandParamData.Builder[][] overloads = new CommandParamData.Builder[VarInts.readUnsignedInt(buffer)][];
+        CommandOverloadData[] overloads = new CommandOverloadData[VarInts.readUnsignedInt(buffer)];
         for (int i = 0; i < overloads.length; i++) {
-            overloads[i] = new CommandParamData.Builder[VarInts.readUnsignedInt(buffer)];
-            for (int i2 = 0; i2 < overloads[i].length; i2++) {
-                overloads[i][i2] = readParameter(buffer, helper);
+            boolean chaining = buffer.readBoolean();
+            CommandParamData[] params = new CommandParamData[VarInts.readUnsignedInt(buffer)];
+            overloads[i] = new CommandOverloadData(chaining, params);
+            for (int i2 = 0; i2 < params.length; i2++) {
+                params[i2] = readParameter(buffer, helper, enums, softEnums, postFixes);
             }
         }
-        return new CommandData.Builder(name, description, flags, permissions, aliasesIndex, overloads);
+        return new CommandData.Builder(name, description, flags, permissions, aliasesIndex, Collections.emptyList(), overloads);
     }
 
     protected void writeParameter(ByteBuf buffer, BedrockPacketHelper helper, CommandParamData param,
@@ -275,12 +243,43 @@ public class AvailableCommandsSerializer_v291 implements BedrockPacketSerializer
         buffer.writeBoolean(param.isOptional());
     }
 
-    protected CommandParamData.Builder readParameter(ByteBuf buffer, BedrockPacketHelper helper) {
-        return new CommandParamData.Builder(
+    protected CommandParamData readParameter(ByteBuf buffer, BedrockPacketHelper helper, List<CommandEnumData> enums, List<CommandEnumData> softEnums, List<String> postFixes) {
+        return this.paramBuilderToParamData(helper, new CommandParamData.Builder(
                 helper.readString(buffer),
                 CommandSymbolData.deserialize(buffer.readIntLE()),
                 buffer.readBoolean(),
                 (byte) 0
-        );
+        ), enums, softEnums, postFixes);
+    }
+
+    protected CommandParamData paramBuilderToParamData(BedrockPacketHelper helper, CommandParamData.Builder param, List<CommandEnumData> enums, List<CommandEnumData> softEnums, List<String> postFixes) {
+        String name = param.getName();
+        CommandSymbolData type = param.getType();
+        boolean optional = param.isOptional();
+        byte optionsByte = param.getOptions();
+
+        String postfix = null;
+        CommandEnumData enumData = null;
+        CommandParam commandParam = null;
+        if (type.isPostfix()) {
+            postfix = postFixes.get(type.getValue());
+        } else {
+            if (type.isCommandEnum()) {
+                enumData = enums.get(type.getValue());
+            } else if (type.isSoftEnum()) {
+                enumData = softEnums.get(type.getValue());
+            } else {
+                commandParam = helper.getCommandParam(type.getValue());
+            }
+        }
+
+        List<CommandParamOption> options = new ObjectArrayList<>();
+        for (int idx = 0; idx < 8; idx++) {
+            if ((optionsByte & (1 << idx)) != 0) {
+                options.add(OPTIONS[idx]);
+            }
+        }
+
+        return new CommandParamData(name, optional, enumData, commandParam, postfix, options);
     }
 }

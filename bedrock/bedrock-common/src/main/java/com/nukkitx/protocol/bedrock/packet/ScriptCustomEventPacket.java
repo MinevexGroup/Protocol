@@ -6,6 +6,10 @@ import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Deprecated since v594
+ */
+@Deprecated
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
 public class ScriptCustomEventPacket extends BedrockPacket {

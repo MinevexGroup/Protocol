@@ -144,6 +144,10 @@ server.bind().join();
 | bedrock-v557 |       1.19.40       |
 | bedrock-v560 |       1.19.50       |
 | bedrock-v567 |       1.19.60       |
+| bedrock-v575 |       1.19.70       |
+| bedrock-v582 |       1.19.80       |
+| bedrock-v589 |       1.20.0        |
+| bedrock-v594 |       1.20.10       |
 
 ##### Repository:
 
@@ -168,7 +172,7 @@ server.bind().join();
         <dependency>
             <groupId>com.nukkitx.protocol</groupId>
             <artifactId>bedrock-v(VERSION)</artifactId>
-            <version>2.9.19-GHD-SNAPSHOT</version>
+            <version>2.9.21-GHD-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
