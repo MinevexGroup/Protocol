@@ -1,11 +1,14 @@
 package com.nukkitx.protocol.bedrock.packet;
 
-import com.nukkitx.nbt.NbtMap;
 import com.nukkitx.protocol.bedrock.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketType;
+import com.nukkitx.protocol.bedrock.data.camera.CameraPreset;
 import com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.List;
 
 /**
  * @author Kaooot
@@ -15,7 +18,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
 public class CameraPresetsPacket extends BedrockPacket {
 
-    private NbtMap data;
+    private final List<CameraPreset> presets = new ObjectArrayList<>();
 
     @Override
     public boolean handle(BedrockPacketHandler handler) {

@@ -42,10 +42,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.*;
 
 import static java.util.Objects.requireNonNull;
@@ -774,6 +771,10 @@ public abstract class BedrockPacketHelper {
         if (exists) {
             consumer.accept(buffer, object);
         }
+    }
+
+    public <T> void writeOptionalNull(ByteBuf buffer, T object, BiConsumer<ByteBuf, T> consumer) {
+        this.writeOptional(buffer, Objects::nonNull, object, consumer);
     }
 
     public void writeEntityProperties(ByteBuf buffer, EntityProperties properties) {
