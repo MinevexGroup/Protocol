@@ -212,5 +212,9 @@ public enum LevelEventType {
     PARTICLE_SHRIEK,
     PARTICLE_SCULK_SOUL,
     PARTCILE_SONIC_EXPLOSION,
-    PARTICLE_BRUSH_DUST
+    PARTICLE_BRUSH_DUST,
+    /**
+     * @since v618
+     */
+    PARTICLE_CHERRY_LEAVES
 }

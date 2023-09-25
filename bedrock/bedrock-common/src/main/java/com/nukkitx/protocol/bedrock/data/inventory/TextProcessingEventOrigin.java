@@ -32,5 +32,9 @@ public enum TextProcessingEventOrigin {
     /**
      * @since v589
      */
-    SUMMON_COMMAND
+    SUMMON_COMMAND,
+    /**
+     * @since v618
+     */
+    PASS_THROUGH_WITHOUT_SIFT
 }
