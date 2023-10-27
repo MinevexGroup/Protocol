@@ -511,5 +511,13 @@ public enum SoundEvent {
      * @since v618
      */
     AMBIENT_UNDERWATER_EXIT,
+    /**
+     * @since v622
+     */
+    BOTTLE_FILL,
+    /**
+     * @since v622
+     */
+    BOTTLE_EMPTY,
     UNDEFINED
 }
