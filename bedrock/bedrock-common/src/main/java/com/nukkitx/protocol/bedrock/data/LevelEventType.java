@@ -216,5 +216,13 @@ public enum LevelEventType {
     /**
      * @since v618
      */
-    PARTICLE_CHERRY_LEAVES
+    PARTICLE_CHERRY_LEAVES,
+    /**
+     * @since v630
+     */
+    PARTICLE_DUST_PLUME,
+    /**
+     * @since v630
+     */
+    PARTICLE_WHITE_SMOKE
 }

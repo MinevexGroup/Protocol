@@ -12,6 +12,10 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * @since v630
+ */
+@Deprecated
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
 public class CraftingEventPacket extends BedrockPacket {
